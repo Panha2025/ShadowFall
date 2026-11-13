@@ -1,0 +1,31 @@
+# Local dependencies and generated build/test output
+node_modules/
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+.cache/
+__pycache__/
+*.py[cod]
+*.log
+*.partial
+*.tmp
+*.swp
+.DS_Store
+
+# Local credentials and environment settings
+.env
+.env.*
+!.env.example
+
+# User-downloaded art bundles are retained locally but are not part of the public repo
+/Action/
+/Main Character/
+/Monster_Model/
+/House/
+/car/
+/assets/*.glb
+
+# Gameplay captures may reproduce uncleared third-party models
+/tests/*.png

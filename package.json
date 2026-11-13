@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "playwright-core": "^1.65.0"
+  },
+  "dependencies": {
+    "@dimforge/rapier3d-compat": "^0.21.0"
+  }
+}

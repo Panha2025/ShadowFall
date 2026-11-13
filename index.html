@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0a1018"><title>SHADOWFALL — Open-World Action Adventure</title><link rel="icon" href="data:,"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="input-fixes.css"></head>
+<body>
+<canvas id="game" aria-label="ShadowFall playable third-person 3D game"></canvas>
+<div id="doorTransition" aria-hidden="true"></div>
+<div class="vignette"></div>
+<div id="loading" class="loading">
+  <div class="loadPanel"><div class="eyebrow">SHADOWFALL / OPEN WORLD</div>
+  <h1>THE REAL WORLD<br><em>STARTS HERE.</em></h1>
+  <p id="loadMessage">Loading your downloaded characters, city, vehicle and Mixamo clips...</p><div class="loadbar"><div id="loadfill"></div></div>
+  <div id="loadInfo">The game uses the Remy FBX, Captain America GLB, city and house models, vehicles, zombie and animation files included with this project.</div>
+  <button id="enter" disabled>LOADING 3D ASSETS…</button>
+  <p class="small">Mac: open <b>START_STAGE1.command</b>. First launch prepares Three.js and Rapier. Click the scene to capture the mouse; press Esc to pause and release it.</p>
+  </div>
+</div>
+<div id="hud" class="hidden">
+  <div class="brand"><strong>NEON<span>COUNTY</span></strong><small id="formLabel">REMY · CIVILIAN MODE</small></div>
+  <div class="stats"><strong id="cash">$450</strong><span id="clock">17:30</span></div>
+  <div class="mission"><small>ACTIVE OBJECTIVE <span id="step">01 / 03</span></small><b id="missionTitle">Meet the local guide</b><span id="missionText">Talk to Sam by the street corner.</span></div>
+  <div class="health"><div><span>HEALTH</span><span id="healthValue">100</span></div><div class="bar"><i id="healthbar"></i></div><div><span>STAMINA</span><span id="staminaValue">100</span></div><div class="bar"><i class="stamina" id="staminabar"></i></div><div><span>ENERGY</span><span id="energyValue">100</span></div><div class="bar"><i class="energy" id="energybar"></i></div></div>
+  <div class="mapwrap"><canvas id="minimap" width="220" height="220"></canvas><span id="district">DOWNTOWN CORE</span></div>
+  <div id="crosshair">+</div>
+  <div id="hint" class="hint hidden"><kbd>E</kbd><span>Talk</span></div>
+  <div class="actionbar"><button id="sprintButton" aria-pressed="false">RUN · SHIFT</button><button id="transformButton">TRANSFORM · T</button><span id="combatStatus">REMY · PUNCH / AREA</span></div>
+  <div id="monsterOverlay" aria-hidden="true"></div>
+  <div class="bottomright"><div class="vehicle-damage hidden" id="vehicleDamage"><div><span>VEHICLE</span><span id="vehicleHealthValue">100</span></div><div class="bar"><i id="vehicleHealthBar"></i></div></div><div class="speed hidden" id="speedbox"><span>KM/H</span><strong id="speed">0</strong></div><div id="toast" class="toast"></div><small>WASD MOVE / A LEFT / D RIGHT · MOUSE LOOK / WHEEL ZOOM · RUN BUTTON / SHIFT · SPACE JUMP / HANDBRAKE · E INTERACT · F CAR · T TRANSFORM · Q SHIELD · R AREA · RIGHT CLICK BLOCK · ESC PAUSE</small></div>
+</div>
+<div id="worldMap" class="world-map hidden" role="dialog" aria-modal="true" aria-labelledby="worldMapTitle">
+  <section class="world-map-card"><header><div><span class="eyebrow">SHADOWFALL / FIELD MAP</span><h2 id="worldMapTitle">RIVERTON COUNTY</h2><p>1040 × 1040 m · Map coordinates: −520 to +520 m</p></div><button id="closeWorldMap" aria-label="Close map">CLOSE <kbd>M</kbd></button></header>
+    <div class="world-map-body"><canvas id="worldMapCanvas" width="760" height="760" aria-label="Map of roads, districts and monster territories"></canvas><aside><h3>MAP LEGEND</h3><p><i class="legend-player"></i>You · facing</p><p><i class="legend-road"></i>Roads</p><p><i class="legend-house"></i>Homes &amp; buildings</p><p><i class="legend-house"></i>Green house marker · E to enter</p><p><i class="legend-village"></i>Large village district</p><p><i class="legend-shop"></i>Shops &amp; services</p><p><i class="legend-objective"></i>Active objective</p><p><i class="legend-enemy"></i>Known nearby monster</p><hr><h3>DANGER AREAS</h3><div id="mapZones"></div><small>Circle = territory boundary · Boss markers are orange. Enemies are shown only when nearby.</small></aside></div><footer><span>WASD to travel · click outside or press <kbd>M</kbd> to close</span><span id="mapPlayerCoords">PLAYER 0, 0</span></footer>
+  </section>
+</div>
+<div id="pause" class="pause hidden"><div class="pausebox"><span class="eyebrow">SHADOWFALL / PAUSED</span><h2>PAUSED</h2><p>ESC unlocks the mouse and pauses the game.</p><button id="resume">RESUME [ESC]</button><div class="choices"><label>Graphics quality <select id="quality"><option value="high">High</option><option value="medium" selected>Balanced</option><option value="low">Performance</option></select></label><label>Mouse look sensitivity <input type="range" id="lookSensitivity" min="0.0008" max="0.005" step="0.0002" value="0.0022"></label><label>Camera follow sensitivity <input type="range" id="cameraFollow" min="4" max="16" step="0.5" value="9.5"></label><label>Walking speed <input type="range" id="walkSpeed" min="2.4" max="5.5" step="0.1" value="3.6"></label><label>Running speed <input type="range" id="runSpeed" min="4.5" max="9" step="0.1" value="6.7"></label><label>Vehicle steering sensitivity <input type="range" id="vehicleSteering" min="0.4" max="1.4" step="0.02" value="0.82"></label><label>Vehicle camera distance <input type="range" id="vehicleCameraDistance" min="6" max="16" step="0.2" value="12.2"></label><label>Model facing direction <select id="facing"><option value="0">Normal</option><option value="3.141592653589793">Reverse</option></select></label></div><p class="tip">Settings save automatically in this browser. Mission progress and money are preserved.</p></div></div>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/","@dimforge/rapier3d-compat":"./node_modules/@dimforge/rapier3d-compat/dist/rapier.mjs"}}</script>
+<script type="module">
+// Surface startup errors on screen (including file:// imports or missing Three.js), never a blank viewport.
+import('./src/main.js').catch(error => {
+  console.error('3D game startup failed', error);
+  document.getElementById('loadMessage').textContent='3D RUNTIME NOT INSTALLED';
+  document.getElementById('loadInfo').textContent='The real 3D engine cannot load: '+(error.message||error)+'. Run START_STAGE1.command in the extracted project folder. Opening index.html directly cannot load local GLB and module files in Chrome.';
+  document.getElementById('enter').textContent='LAUNCH THROUGH MAC START FILE';
+  document.getElementById('enter').disabled=true;
+});
+</script>
+</body></html>
